@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react'
-import type { UserItem, UserStats } from './index'
 
 // Layout Props
 export interface WorkstationLayoutProps {
