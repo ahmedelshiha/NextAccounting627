@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useState, useMemo } from 'react'
-import QuickActionsBar from '../QuickActionsBar'
-import OperationsOverviewCards from '../OperationsOverviewCards'
+import { QuickActionsBar } from '../QuickActionsBar'
+import OverviewCards from './OverviewCards'
 import AdminSidebar from './AdminSidebar'
 import DirectoryHeader from './DirectoryHeader'
 import UserDirectorySection from './UserDirectorySection'
