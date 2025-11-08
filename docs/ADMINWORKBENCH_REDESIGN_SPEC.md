@@ -146,7 +146,7 @@ This document provides:
 │  │ Editor       │               │  └────────────────────────┘  │
 │  │ Viewer       │               │                              │
 │  └──────────────┘               │  User Directory              │
-│                                  │  ┌────────────────────────┐  │
+│                                  │  ┌────────────────���───────┐  │
 │  User Growth                      │  │ Name│Email│Role│Status│  │
 │  ┌──────────────┐               │  │ Jane│jane@│Adm│Active│  │
 │  │ [Line Chart] │               │  │ John│john@│Edit│Inact│  │
@@ -310,7 +310,7 @@ This document provides:
 │ Ahmed Khan  │ ahmed.khan@ex...   │ Viewer  │ Active  │ Oct.. │   •••   │
 │ Emily John..│ emily.johnson@ex...│ Editor  │ Active  │ Jul.. │   •••   │
 │ Michael B..│ michael.brown@ex...│ Admin   │ Active  │ May.. │   •••   │
-│ Sophia G...│ sophia.garcia@ex...│ Viewer  │ Inactive│ Mar.. │   •••   │
+│ Sophia G...��� sophia.garcia@ex...│ Viewer  │ Inactive│ Mar.. │   •••   │
 └───────────────────────��─────────────────────────────────────┘
 ```
 
@@ -476,7 +476,7 @@ This document provides:
 
 **Current State (Deployed):**
 ```
-┌───────────────────────────────────────────────────────���─┐
+┌───���───────────────────────────────────────────────────���─┐
 │  Dashboard  Workflows  Bulk Ops  Audit Log  RBAC  Admin │ ← Dark tabs
 ├─────────────────────────────────────────────────────────┤
 │                                                         │
@@ -1888,7 +1888,240 @@ bg-red-900/20 text-red-400 → bg-red-100 text-red-800 border border-red-300
 
 ---
 
-**Document Version:** 1.0  
-**Last Updated:** January 2025  
-**Author:** Engineering Team  
+## Part 11: USER DIRECTORY TABLE IMPLEMENTATION PLAN
+
+### Overview
+This section documents the User Directory table features analyzed from the target design and provides a detailed implementation checklist to ensure all features are correctly implemented.
+
+### Target Design Features Analysis
+
+**User Directory Table Structure:**
+- **6 Columns:** Name (with avatar), Email, Role, Status, Date Joined, Actions
+- **6+ Visible Rows:** Users display with real data
+- **Row Interactions:** Hover effects, checkbox selection, three-dots action menu
+- **Status Badges:**
+  - Active: Green background (#10b981) with green border (#059669)
+  - Inactive: Red background (#ef4444) with red border (#dc2626)
+- **Role Badges:** Color-coded (Admin: red, Editor: blue, Viewer: green, Team Lead: purple, Staff: cyan, Client: emerald)
+- **Avatar Display:** Small circular images in Name column with fallback
+- **Email Truncation:** Long emails show ellipsis (...)
+- **Date Formatting:** "Mon DD, YYYY" format (e.g., "Jan 19, 2024")
+
+### Implementation Checklist
+
+#### Table Core Functionality (5 items)
+
+1. **Verify Table Column Rendering**
+   - [ ] All 6 columns render: Name, Email, Role, Status, Date Joined, Actions
+   - [ ] Column order matches target design
+   - [ ] Column widths are proportional and responsive
+   - **File:** `src/app/admin/users/components/UsersTable.tsx`
+
+2. **Verify Avatar Display**
+   - [ ] Avatar displays in Name column
+   - [ ] Avatar size: 32px (w-8 h-8)
+   - [ ] Placeholder image for missing avatars
+   - [ ] Lazy loading enabled for performance
+   - [ ] Proper alt text for accessibility
+   - **File:** `src/app/admin/users/components/UserRow.tsx`
+
+3. **Verify Row Hover Effects**
+   - [ ] Hover background: light gray (#f9fafb)
+   - [ ] Smooth transition (200-300ms)
+   - [ ] Hover effect applies to entire row
+   - [ ] Actions menu becomes more visible on hover (opacity change)
+   - **File:** `src/app/admin/users/components/UserRow.tsx`
+
+4. **Verify Status Badges**
+   - [ ] Active badge: Green background (#dcfce7), green text (#166534), green border (#bbf7d0)
+   - [ ] Inactive badge: Red background (#fee2e2), red text (#991b1b), red border (#fecaca)
+   - [ ] Badge padding: 4px 8px
+   - [ ] Badge border radius: 4px
+   - [ ] Font size: 12px, font weight: 500
+   - **File:** `src/app/admin/users/components/UserRow.tsx`
+
+5. **Verify Role Badges**
+   - [ ] Admin: Red background (#fca5a5) with red text (#991b1b)
+   - [ ] Editor: Blue background (#bfdbfe) with blue text (#1e40af)
+   - [ ] Viewer: Green background (#bbf7d0) with green text (#065f46)
+   - [ ] Team Lead: Purple background (#d8b4fe) with purple text (#6b21a8)
+   - [ ] Team Member: Blue background (#bfdbfe) with blue text (#1e40af)
+   - [ ] Staff: Cyan background (#a5f3fc) with cyan text (#0e7490)
+   - [ ] Client: Emerald background (#a7f3d0) with emerald text (#065f46)
+   - **File:** `src/app/admin/users/components/UserRow.tsx`
+
+#### Row Selection & Actions (3 items)
+
+6. **Verify Row Selection Checkboxes**
+   - [ ] Checkbox displays in first column
+   - [ ] Checkbox is clickable and functional
+   - [ ] Selected state updates parent component
+   - [ ] Multiple rows can be selected simultaneously
+   - [ ] Visual feedback on selection (highlighting)
+   - **File:** `src/app/admin/users/components/UserRow.tsx`
+
+7. **Verify Actions Dropdown Menu**
+   - [ ] Three-dots button (⋮) displays in last column
+   - [ ] Dropdown menu includes these options:
+     - [ ] View Profile
+     - [ ] Edit Name
+     - [ ] Reset Password
+     - [ ] Change Role
+     - [ ] Delete User (red text)
+   - [ ] Menu alignment: right-aligned
+   - [ ] Click outside closes menu
+   - [ ] Keyboard navigation (arrow keys, Escape)
+   - **File:** `src/app/admin/users/components/UserRow.tsx`
+
+8. **Verify View Profile Interaction**
+   - [ ] Clicking "View Profile" opens UserProfileDialog
+   - [ ] Dialog receives correct user data from context
+   - [ ] Dialog displays user information in tabs (Overview, Details, Activity, Settings)
+   - [ ] Dialog can be closed without changes
+   - [ ] Dialog properly sets context state (selectedUser, profileOpen)
+   - **File:** `src/app/admin/users/components/UserProfileDialog/index.tsx`
+
+#### Data Formatting (3 items)
+
+9. **Verify Email Column**
+   - [ ] Email displays truncated if longer than ~30 characters
+   - [ ] Ellipsis (...) shows at the end of truncated emails
+   - [ ] Full email visible on hover (title attribute)
+   - [ ] Email text color: gray-600 (#4b5563)
+   - [ ] Font size: 12px
+   - **File:** `src/app/admin/users/components/UserRow.tsx`
+
+10. **Verify Date Joined Column**
+    - [ ] Date displays in format: "Mon DD, YYYY" (e.g., "Jan 19, 2024")
+    - [ ] Uses `user.createdAt` property
+    - [ ] Handles invalid/missing dates gracefully
+    - [ ] Text color: gray-600 (#4b5563)
+    - [ ] Font size: 12px
+    - **File:** `src/app/admin/users/components/UserRow.tsx`
+
+11. **Verify Name Column Display**
+    - [ ] User name displays with proper capitalization
+    - [ ] Double-click enables inline editing (existing feature)
+    - [ ] Name truncates if very long (max 2-3 lines)
+    - [ ] Email displays below name in gray text
+    - [ ] Font size for name: 14px, weight: 500 (medium)
+    - [ ] Font size for email: 12px, weight: 400
+    - **File:** `src/app/admin/users/components/UserRow.tsx`
+
+#### Table Layout & Performance (3 items)
+
+12. **Verify Minimum Visible Rows**
+    - [ ] Table displays minimum 6 rows in viewport
+    - [ ] Table height: flex-1 with overflow-hidden
+    - [ ] No horizontal scrollbar (table fits container width)
+    - [ ] Table header: sticky positioning (top: 0, z-index: 20)
+    - [ ] Header background: light gray (#f9fafb)
+    - **File:** `src/app/admin/users/components/UsersTable.tsx`
+
+13. **Verify Virtualization & Scrolling**
+    - [ ] Table uses virtualization (react-window) for performance
+    - [ ] Scroll performance: 60 FPS with 100+ rows
+    - [ ] No layout shift (CLS < 0.1) during scroll
+    - [ ] Scrollbar visible on right edge when needed
+    - [ ] Smooth scroll behavior (no jank)
+    - **File:** `src/app/admin/users/components/UsersTable.tsx`
+
+14. **Verify Table Styling Details**
+    - [ ] Row height: 56px (consistent)
+    - [ ] Row borders: bottom only, 1px solid #e5e7eb
+    - [ ] Row background: white (#ffffff)
+    - [ ] Header background: light gray (#f9fafb)
+    - [ ] Header text color: gray-600 (#4b5563), weight: 600
+    - [ ] Header padding: 12px
+    - [ ] Row padding: 12px (all sides)
+    - [ ] Gap between columns: 16px
+    - **File:** `src/app/admin/users/components/UsersTable.tsx` and `styles/admin-users-layout.css`
+
+#### Integration with Supporting Features (4 items)
+
+15. **Verify Bulk Operations Footer Integration**
+    - [ ] Footer shows selection counter: "{n} users selected"
+    - [ ] Status dropdown available when users selected
+    - [ ] Apply Changes button functional
+    - [ ] Footer sticky position (bottom: 0, z-index: 30)
+    - [ ] Footer appears only when selectedCount > 0
+    - **File:** `src/app/admin/users/components/workbench/BulkActionsPanel.tsx`
+
+16. **Verify Analytics Sidebar**
+    - [ ] Sidebar displays on desktop (≥1024px)
+    - [ ] Role Distribution pie chart renders correctly
+    - [ ] User Growth line chart renders correctly
+    - [ ] Charts use proper colors (teal/turquoise palette)
+    - [ ] Charts have legends and labels
+    - [ ] Filters section: Role and Status dropdowns
+    - [ ] Clear Filters button functional
+    - **File:** `src/app/admin/users/components/workbench/AdminSidebar.tsx`
+
+17. **Verify KPI Cards Section**
+    - [ ] All 5 cards display: Active Users, Pending Approvals, In Progress Workflows, System Health, Cost Per User
+    - [ ] Card data matches target: 120, 15, 24, 98.5%, $45
+    - [ ] Delta indicators show correct percentages: +5%, -10%, -5%, +3%, -2%
+    - [ ] Delta colors: green for positive, red for negative
+    - [ ] Cards responsive grid: 1 col (mobile), 2 cols (tablet), 5 cols (desktop)
+    - **File:** `src/app/admin/users/components/workbench/OverviewCards.tsx`
+
+18. **Verify Responsive Design**
+    - [ ] Desktop (≥1400px): Sidebar visible, table shows all columns
+    - [ ] Tablet (768-1399px): Sidebar hidden, toggle button visible, table scrolls if needed
+    - [ ] Mobile (<768px): Full-width table, horizontal scroll for columns, sidebar as drawer
+    - [ ] Header buttons stack or collapse on mobile
+    - [ ] Table header remains sticky on all devices
+    - [ ] No text overflow or truncation issues
+    - **File:** `src/app/admin/users/components/styles/admin-users-layout.css`
+
+### Success Criteria
+
+All 18 checklist items must be verified and passing:
+- ✅ Table renders all 6 columns with correct data
+- ✅ Badges and styling match target colors exactly
+- ✅ Row selection, hover effects, and interactions work smoothly
+- ✅ View Profile opens dialog with correct user data
+- ✅ Table displays minimum 6 visible rows
+- ✅ Virtualization provides smooth performance
+- ✅ Responsive design works on all breakpoints
+- ✅ Bulk operations footer integrates properly
+- ✅ Analytics sidebar displays charts and filters
+- ✅ KPI cards show correct data with delta indicators
+
+### Files to Review/Update
+
+**Core Components:**
+- `src/app/admin/users/components/UsersTable.tsx` - Main table component
+- `src/app/admin/users/components/UserRow.tsx` - Individual row with cells
+- `src/app/admin/users/components/UserProfileDialog/index.tsx` - User detail dialog
+- `src/app/admin/users/components/workbench/UsersTableWrapper.tsx` - Table wrapper/adapter
+- `src/app/admin/users/components/workbench/BulkActionsPanel.tsx` - Bulk operations footer
+- `src/app/admin/users/components/workbench/AdminSidebar.tsx` - Analytics sidebar
+- `src/app/admin/users/components/workbench/OverviewCards.tsx` - KPI metrics
+
+**Styling:**
+- `src/app/admin/users/components/styles/admin-users-layout.css` - Layout and theme colors
+- Tailwind config: `tailwind.config.ts` (if light theme needs configuration)
+
+### Testing Approach
+
+1. **Visual Testing:** Compare current implementation with target design image
+2. **Functional Testing:** Test all user interactions (selection, actions, filtering)
+3. **Responsive Testing:** Test on desktop (1400px+), tablet (768px), and mobile (<768px)
+4. **Performance Testing:** Verify virtualization with 100+ rows, measure FPS and CLS
+5. **Accessibility Testing:** Ensure keyboard navigation, ARIA labels, and color contrast
+6. **Browser Testing:** Chrome, Firefox, Safari compatibility
+
+### Estimated Effort
+
+- **Review & Analysis:** 1-2 hours
+- **Implementation/Fixes:** 2-4 hours (depends on current state)
+- **Testing & Polish:** 1-2 hours
+- **Total:** 4-8 hours
+
+---
+
+**Document Version:** 1.0
+**Last Updated:** January 2025
+**Author:** Engineering Team
 **Status:** Ready for Implementation
