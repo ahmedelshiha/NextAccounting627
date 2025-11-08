@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo } from 'react'
 import { QuickActionsBar } from '../QuickActionsBar'
+import { ImportWizard } from '../ImportWizard'
 import OverviewCards from './OverviewCards'
 import AdminSidebar from './AdminSidebar'
 import DirectoryHeader from './DirectoryHeader'
@@ -9,6 +10,8 @@ import UserDirectorySection from './UserDirectorySection'
 import BulkActionsPanel from './BulkActionsPanel'
 import { BuilderHeaderSlot, BuilderMetricsSlot, BuilderSidebarSlot, BuilderFooterSlot } from './BuilderSlots'
 import { useIsBuilderEnabled } from '@/hooks/useIsBuilderEnabled'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { toast } from 'sonner'
 import '../styles/admin-users-layout.css'
 
 /**
@@ -20,7 +23,7 @@ import '../styles/admin-users-layout.css'
  * ├──────────────┬─────────────────────────���──┤
  * │              │                            │
  * │   Sidebar    │     Main Content Area      │
- * │  (Analytics  │   ┌──────────────────┐    │
+ * │  (Analytics  │   ┌──────────────────��    │
  * │  + Filters)  │   │   OverviewCards  │    │
  * │              │   ├──────────────────┤    │
  * │              │   │   DirectoryHead  │    │
@@ -28,7 +31,7 @@ import '../styles/admin-users-layout.css'
  * │              │   │  UsersTable      │    │
  * │              │   │  (virtualized)   │    │
  * │              │   └──────────────────┘    │
- * ├──────────────┴────────────────────────────┤
+ * ├──────────────┴──────────���─────────────────┤
  * │  Sticky Footer: BulkActionsPanel (if sel) │
  * └────────────────���────────────────────────────┘
  * 
@@ -41,6 +44,8 @@ export default function AdminUsersLayout() {
   const [selectedUserIds, setSelectedUserIds] = useState<Set<string>>(new Set())
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [filters, setFilters] = useState<Record<string, any>>({})
+  const [showImportWizard, setShowImportWizard] = useState(false)
+  const [isExporting, setIsExporting] = useState(false)
   const isBuilderEnabled = useIsBuilderEnabled()
 
   const selectedCount = useMemo(() => selectedUserIds.size, [selectedUserIds.size])
@@ -49,11 +54,53 @@ export default function AdminUsersLayout() {
     setSelectedUserIds(new Set())
   }
 
+  const handleAddUser = () => {
+    console.log('Add User clicked')
+    // TODO: Implement add user functionality (open modal or navigate)
+    toast.info('Add User feature coming soon')
+  }
+
+  const handleImport = () => {
+    console.log('Import clicked')
+    setShowImportWizard(true)
+  }
+
+  const handleExport = async () => {
+    console.log('Export clicked')
+    try {
+      setIsExporting(true)
+      // TODO: Implement actual export functionality
+      toast.success('Export feature coming soon')
+    } catch (error) {
+      toast.error('Failed to export users')
+      console.error('Export error:', error)
+    } finally {
+      setIsExporting(false)
+    }
+  }
+
+  const handleRefresh = () => {
+    console.log('Refresh clicked')
+    window.location.reload()
+  }
+
+  const handleImportComplete = (results: any) => {
+    setShowImportWizard(false)
+    toast.success(`Imported ${results.successfulRows} users successfully`)
+  }
+
   return (
     <div className="admin-workbench-container">
       {/* Sticky Header - Builder.io slot with fallback */}
       <header className="admin-workbench-header" role="banner" data-testid="admin-workbench-header">
-        {isBuilderEnabled ? <BuilderHeaderSlot /> : <QuickActionsBar />}
+        {isBuilderEnabled ? <BuilderHeaderSlot /> : (
+          <QuickActionsBar
+            onAddUser={handleAddUser}
+            onImport={handleImport}
+            onExport={handleExport}
+            onRefresh={handleRefresh}
+          />
+        )}
       </header>
 
       {/* Main Content Area */}
@@ -114,6 +161,16 @@ export default function AdminUsersLayout() {
           )}
         </footer>
       )}
+
+      {/* Import Wizard Modal */}
+      <Dialog open={showImportWizard} onOpenChange={setShowImportWizard}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Import Users</DialogTitle>
+          </DialogHeader>
+          <ImportWizard onImportComplete={handleImportComplete} />
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

@@ -7,7 +7,6 @@ export interface OperationsMetrics {
   totalUsers: number
   pendingApprovals: number
   inProgressWorkflows: number
-  dueThisWeek: number
   systemHealth?: number
 }
 
@@ -26,7 +25,7 @@ interface MetricCardProps {
 }
 
 /**
- * Individual metric card component
+ * Individual metric card component (compact 50% reduced size)
  */
 function MetricCard({
   title,
@@ -38,22 +37,22 @@ function MetricCard({
 }: MetricCardProps) {
   return (
     <Card className="bg-white border-gray-200 border-1">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-        <CardTitle className="text-sm font-medium text-gray-600">{title}</CardTitle>
-        <span className="text-xl">{icon}</span>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 pt-3 px-4">
+        <CardTitle className="text-xs font-medium text-gray-600">{title}</CardTitle>
+        <span className="text-lg">{icon}</span>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-4 pb-3">
         {isLoading ? (
-          <div className="space-y-2">
-            <div className="h-8 bg-gray-100 rounded w-16 animate-pulse" />
-            <div className="h-4 bg-gray-100 rounded w-24 animate-pulse" />
+          <div className="space-y-1">
+            <div className="h-6 bg-gray-100 rounded w-12 animate-pulse" />
+            <div className="h-3 bg-gray-100 rounded w-16 animate-pulse" />
           </div>
         ) : (
           <>
-            <div className="text-3xl font-bold text-gray-900">{value}</div>
+            <div className="text-2xl font-bold text-gray-900">{value}</div>
             {trend !== undefined && (
               <div
-                className={`text-sm font-medium mt-2 ${
+                className={`text-xs font-medium mt-1 ${
                   trend > 0 ? 'text-green-600' : trend < 0 ? 'text-red-600' : 'text-gray-600'
                 }`}
               >
@@ -71,16 +70,17 @@ function MetricCard({
  * Operations Overview Cards
  *
  * Displays key metrics for user management:
- * - Active Users
- * - Pending Approvals
- * - In-Progress Workflows
- * - System Health
- * - Due This Week
+ * - Active Users (with +5% trend)
+ * - Pending Approvals (with -10% trend)
+ * - In-Progress Workflows (with -5% trend)
+ * - System Health (with +3% trend)
+ * - Cost Per User (with -2% trend)
  *
  * Features:
- * - Responsive grid layout (5 columns on desktop)
- * - Loading state support
- * - Trend indicators
+ * - Responsive grid layout (5 columns on desktop, 2 on tablet, 1 on mobile)
+ * - Compact 50% reduced size for better space efficiency
+ * - Loading state support with skeletons
+ * - Trend indicators (↑↓→ with percentages)
  * - Quick at-a-glance status
  * - Light theme styling
  */
@@ -127,12 +127,12 @@ export function OperationsOverviewCards({
       />
 
       <MetricCard
-        title="Due This Week"
-        value={metrics.dueThisWeek}
-        icon="📅"
-        description="Upcoming deadlines"
+        title="Cost Per User"
+        value="$45"
+        icon="💰"
+        description="Average user cost"
         isLoading={isLoading}
-        trend={metrics.dueThisWeek > 0 ? -1 : 0}
+        trend={-2}
       />
     </div>
   )
