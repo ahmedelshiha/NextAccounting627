@@ -19,7 +19,7 @@ interface UsersTableProps {
 
 const UserRowSkeleton = memo(function UserRowSkeleton() {
   return (
-    <div className="grid grid-cols-[40px_2fr_2fr_1fr_1fr_1fr_80px] items-center gap-4 px-4 py-3 border-b border-gray-200 bg-white animate-pulse">
+    <div className="grid grid-cols-[40px_minmax(220px,2fr)_minmax(240px,2fr)_120px_110px_120px_80px] items-center gap-4 px-4 py-3 border-b border-gray-200 bg-white animate-pulse">
       <div className="w-5 h-5 bg-gray-200 rounded" />
       <div className="h-4 bg-gray-200 rounded w-32" />
       <div className="h-3 bg-gray-200 rounded w-48" />
