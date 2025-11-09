@@ -51,7 +51,7 @@ Implement a minimal, Excel-style filter bar above the User Directory table that 
 | Feature | Oracle Cloud | SAP Analytics | Current Plan | Priority |
 |---------|--------------|---------------|--------------|----------|
 | **Basic Filters** | ✅ | ✅ | ✅ MVP | Must Have |
-| Text Search (name/email/phone) | �� | ✅ | ✅ MVP | Must Have |
+| Text Search (name/email/phone) | ✅ | ✅ | ✅ MVP | Must Have |
 | Dropdown Filters (Role/Status) | ✅ | ✅ | ✅ MVP | Must Have |
 | Multi-select Filters | ✅ | ✅ | ❌ V2 | High |
 | Advanced Search Operators | ✅ | ✅ | ❌ V2 | High |
@@ -136,7 +136,7 @@ Implement a minimal, Excel-style filter bar above the User Directory table that 
 │ ☐ [Search name, email, phone...] │ Role: All ▼ │ Status: All ▼ │ Clear │
 ├─────────────────────────────────────────────────────────────┤
 │ 3 selected • 6 of 12 users                                  │
-└─────────────────────────��───────────────────────────────────┘
+└─────────────────────────────────────────────────────────────┘
 ```
 
 **Characteristics:**
@@ -155,9 +155,9 @@ Implement a minimal, Excel-style filter bar above the User Directory table that 
 │ [🗑 Clear All]                                               │
 ├─────────────────────────────────────────────────────────────┤
 │ 👁 Columns   📥 Import   📤 Export   ⚙️ Advanced            │
-├────────────────────────────────────────────────��────────────┤
+├─────────────────────────────────────────────────────────────┤
 │ 3 selected • 6 of 12 users • Filtered ✓                    │
-└─────────────────────────────────────────────────────────────┘
+└──────────────────────��──────────────────────────────────────┘
 ```
 
 **Enhancements:**
@@ -206,7 +206,7 @@ Implement a minimal, Excel-style filter bar above the User Directory table that 
 │                                         │
 │  ┌─────────────────────────────────┐   │
 │  │ UserDirectoryFilterBar          │   │
-│  │  ├─ SearchInput (debounced)     │   │
+��  │  ├─ SearchInput (debounced)     │   │
 │  │  ├─ RoleFilter (dropdown)       │   │
 │  │  ├─ StatusFilter (dropdown)     │   │
 │  │  ├─ SelectAllCheckbox           │   │
@@ -225,7 +225,7 @@ Implement a minimal, Excel-style filter bar above the User Directory table that 
 │  │ UsersTable (Virtualized)        │   │
 │  │  ├─ selectedUserIds: Set        │   │
 │  │  └─ onSelectAll()               │   │
-│  └──────────────────��──────────────┘   │
+│  └─────────────���───────────────────┘   │
 │                                         │
 └─────────────────────────────────────────┘
 ```
@@ -1114,7 +1114,7 @@ interface SearchConfig {
 
 **Example Searches:**
 - `john` → Contains "john" (default)
-- `=john` �� Exact match "john"
+- `=john` → Exact match "john"
 - `^john` → Starts with "john"
 - `john$` → Ends with "john"
 - `john|jane` → Regex OR operator
@@ -1420,6 +1420,7 @@ Phase 3 (Advanced - Future)
 
 ## 📝 Notes & Considerations
 
+### MVP-Specific Notes
 1. **State Management:** Using local React state with useMemo is sufficient for client-side filtering. For 10,000+ users, consider server-side filtering via API.
 
 2. **Debounce:** 400ms delay balances responsiveness with performance. Can be adjusted based on user feedback.
@@ -1433,6 +1434,58 @@ Phase 3 (Advanced - Future)
 6. **Mobile:** Consider collapsible/sticky behavior on mobile devices.
 
 7. **Backend API:** If server-side filtering is later needed, the `/api/admin/users/search/route.ts` endpoint already supports it.
+
+### Enterprise Features - Design Patterns
+
+1. **Multi-Select Dropdowns:**
+   - Use checkboxes instead of select value
+   - Show count badge: "Role: 2 selected"
+   - Allow clearing individual items
+   - Combine selections with AND logic
+
+2. **Filter Pills/Badges:**
+   - Display as removable tags
+   - Support color coding (e.g., blue for search, green for role)
+   - Show clear count of active filters
+   - Place in secondary toolbar below search row
+
+3. **Advanced Search Operators:**
+   - Prefix syntax: `=exact`, `^starts`, `$ends`, `~regex`
+   - Support escaping special characters
+   - Provide help tooltip with examples
+   - Validate user input
+
+4. **Export Functionality:**
+   - Export filtered results (not just selected)
+   - Support multiple formats: CSV, Excel (XLSX), PDF
+   - Include column selection (choose which columns to export)
+   - Show export progress for large datasets
+
+5. **Filter Persistence:**
+   - Store in localStorage for session persistence
+   - Optionally sync with user preferences in DB
+   - Support "Set as Default" for commonly used filters
+   - Clear on logout
+
+6. **Bulk Actions Panel:**
+   - Show only when rows selected
+   - Display selection count prominently
+   - Support actions: Update Status, Assign Role, Export, Delete
+   - Show confirmation dialogs for destructive actions
+   - Progress bar for batch operations
+
+7. **Column Management:**
+   - Allow show/hide columns
+   - Persist column visibility in localStorage
+   - Support column reordering (drag-and-drop)
+   - Save as custom view/layout
+
+8. **Performance Optimization:**
+   - Debounce multi-select filter changes (500ms)
+   - Memoize filter dropdown options
+   - Lazy load column visibility menu
+   - Use React.memo for filter pills
+   - Virtualize saved filter list if large
 
 ---
 
