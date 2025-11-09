@@ -24,9 +24,9 @@ export const UserCreateSchema = z.object({
   location: z.string()
     .max(255, 'Location must be less than 255 characters')
     .optional(),
-  role: z.enum(['USER', 'TEAM_MEMBER', 'TEAM_LEAD', 'ADMIN'], {
+  role: z.enum(['CLIENT'], {
     message: 'Select a valid role'
-  }).default('USER'),
+  }).default('CLIENT'),
   isActive: z.boolean().default(true),
   requiresOnboarding: z.boolean().default(true),
   notes: z.string()
