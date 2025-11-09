@@ -62,32 +62,25 @@ export default function InlineUserProfile({ onBack }: { onBack: () => void }) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Button variant="outline" onClick={handleBack} className="mb-2">
-            ← Back to dashboard List
+      {editMode && activeTab === 'details' && (
+        <div className="flex items-center gap-2 mb-4">
+          <Button
+            onClick={handleSaveProfile}
+            disabled={updating}
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            {updating ? 'Saving...' : 'Save Changes'}
+          </Button>
+          <Button
+            onClick={() => setEditMode(false)}
+            disabled={updating}
+            variant="outline"
+            className="border-slate-300 text-slate-700 hover:bg-slate-50"
+          >
+            Cancel
           </Button>
         </div>
-        {editMode && activeTab === 'details' && (
-          <div className="flex items-center gap-2 mb-2">
-            <Button
-              onClick={handleSaveProfile}
-              disabled={updating}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
-            >
-              {updating ? 'Saving...' : 'Save Changes'}
-            </Button>
-            <Button
-              onClick={() => setEditMode(false)}
-              disabled={updating}
-              variant="outline"
-              className="border-slate-300 text-slate-700 hover:bg-slate-50"
-            >
-              Cancel
-            </Button>
-          </div>
-        )}
-      </div>
+      )}
 
       {/* Header */}
       <div className="bg-gradient-to-r from-slate-50 to-slate-100 border border-slate-200 rounded-lg">
