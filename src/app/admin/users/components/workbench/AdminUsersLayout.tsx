@@ -20,7 +20,7 @@ import '../styles/admin-users-layout.css'
  * Main layout grid for AdminWorkBench
  * 
  * Layout structure:
- * ┌─────────────────────────────────────────────┐
+ * ┌────────────────��────────────────────────────┐
  * │        Sticky Header: QuickActionsBar        │
  * ├──────────────┬─────────────────��───────������─┤
  * │              │                            │
@@ -35,7 +35,7 @@ import '../styles/admin-users-layout.css'
  * │              │   └──────────────────┘    │
  * ├──────────────┴──────────���─────────────────┤
  * │  Sticky Footer: BulkActionsPanel (if sel) │
- * └────────────────���────────────────────────────┘
+ * └────────────────���────────────��───────────────┘
  * 
  * Responsive breakpoints:
  * - Desktop (≥1400px): Sidebar visible, 3-column layout
@@ -153,7 +153,15 @@ export default function AdminUsersLayout() {
     <div className="admin-workbench-container">
       {/* Sticky Header - Builder.io slot with fallback */}
       <header className="admin-workbench-header" role="banner" data-testid="admin-workbench-header">
-        {isBuilderEnabled ? <BuilderHeaderSlot /> : (
+        {isBuilderEnabled ? (
+          <BuilderHeaderSlot
+            onAddUser={handleAddUser}
+            onImport={handleImport}
+            onExport={handleExport}
+            onRefresh={handleRefresh}
+            isRefreshing={isRefreshing}
+          />
+        ) : (
           <QuickActionsBar
             onAddUser={handleAddUser}
             onImport={handleImport}
