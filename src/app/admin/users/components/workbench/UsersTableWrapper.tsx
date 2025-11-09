@@ -41,7 +41,11 @@ export default function UsersTableWrapper({
     filteredUsers,
     hasActiveFilters,
     clearFilters,
-    stats
+    stats,
+    toggleRole,
+    toggleStatus,
+    clearRoles,
+    clearStatuses
   } = useFilterState(context.users)
 
   const handleSelectUser = useCallback(
