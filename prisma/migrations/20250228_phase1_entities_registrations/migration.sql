@@ -130,7 +130,7 @@ CREATE TABLE IF NOT EXISTS "filing_periods" (
   "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
   CONSTRAINT "filing_periods_obligationId_fkey" FOREIGN KEY ("obligationId") REFERENCES "obligations"("id") ON DELETE CASCADE,
-  CONSTRAINT "filing_periods_assigneeId_fkey" FOREIGN KEY ("assigneeId") REFERENCES "User"("id") ON DELETE SET NULL
+  CONSTRAINT "filing_periods_assigneeId_fkey" FOREIGN KEY ("assigneeId") REFERENCES "users"("id") ON DELETE SET NULL
 );
 
 CREATE INDEX "filing_periods_obligationId_idx" ON "filing_periods"("obligationId");
