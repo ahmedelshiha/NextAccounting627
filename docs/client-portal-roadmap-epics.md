@@ -465,59 +465,59 @@ Phase 14 — Security & Compliance
 
 ## Phased To‑Do Checklists (markable)
 
-Phase 0 — Foundations
-- [ ] Create country registry at src/lib/settings/registry.ts with UAE/KSA/EGY seeds
-- [ ] RBAC/SoD audit and tests in tests/integration/auth/*
-- [ ] RTL + Arabic toggle in src/app/layout.tsx and src/components/ui/navigation.tsx
-- [ ] Sentry perf spans in layout and API wrappers; monitoring dashboards updated
-- [ ] Feature flag gates for portal modules (NEXT_PUBLIC_*)
+Phase 0 — Foundations ✅ COMPLETE
+- [x] Create country registry at src/lib/settings/registry.ts with UAE/KSA/EGY seeds
+- [x] RBAC/SoD audit and tests in tests/integration/auth/*
+- [x] RTL + Arabic toggle in src/app/layout.tsx and src/components/ui/navigation.tsx
+- [x] Sentry perf spans in layout and API wrappers; monitoring dashboards updated
+- [x] Feature flag gates for portal modules (NEXT_PUBLIC_*)
 
-Phase 1 — Entities & People
-- [ ] Prisma migration: entities, registrations, economic_zones
-- [ ] Services: src/services/entities/index.ts CRUD + validation
-- [ ] Admin UI for entities/people with role guards
-- [ ] Invitations + 2FA flows wired to UserProfile
-- [ ] CSV bulk import with validation and background job
+Phase 1 — Entities & People ✅ COMPLETE
+- [x] Prisma migration: entities, registrations, economic_zones
+- [x] Services: src/services/entities/index.ts CRUD + validation
+- [x] Admin UI for entities/people with role guards
+- [x] Invitations + 2FA flows wired to UserProfile
+- [x] CSV bulk import with validation and background job
 
-Phase 1.1 — Business Setup Wizard (Modular)
-- [ ] SetupWizard.tsx shell with ARIA Tabs and focus-trap
-- [ ] Tabs/{ExistingBusiness, NewStartup, Individual}.tsx (~120 LOC each)
-- [ ] Hooks {useSetupForm, useLicenseLookup} + zod schemas
-- [ ] API POST /api/entities/setup and GET /api/registries/:country/:number
-- [ ] Consent capture + audit events + idempotency keys
-- [ ] Dynamic import + Suspense + skeletons; ErrorBoundary per tab
-- [ ] E2E happy/duplicate/offline/manual-review
+Phase 1.1 — Business Setup Wizard (Modular) ✅ COMPLETE
+- [x] SetupWizard.tsx shell with ARIA Tabs and focus-trap
+- [x] Tabs/{ExistingBusiness, NewStartup, Individual}.tsx (~120 LOC each)
+- [x] Hooks {useSetupForm, useLicenseLookup} + zod schemas
+- [x] API POST /api/entities/setup and GET /api/registries/:country/:number
+- [x] Consent capture + audit events + idempotency keys
+- [x] Dynamic import + Suspense + skeletons; ErrorBoundary per tab
+- [x] E2E happy/duplicate/offline/manual-review
 
-Phase 1.1B — Verification
-- [ ] Worker src/lib/jobs/entity-setup.ts (queue, retries, pub/sub)
-- [ ] Pending/Success/Error screens with deep links
-- [ ] Telemetry events + unit tests for state machine
+Phase 1.1B — Verification ✅ COMPLETE
+- [x] Worker src/lib/jobs/entity-setup.ts (queue, retries, pub/sub)
+- [x] Pending/Success/Error screens with deep links
+- [x] Telemetry events + unit tests for state machine
 
-Phase 2 — Dashboard (mobile/desktop)
-- [ ] Responsive grid + sidebar/bottom‑nav parity
-- [ ] Verification banner widget bound to setup status
-- [ ] Upcoming Compliance widget + counts API
-- [ ] Feature tiles (KYC, Documents, Invoicing, Upload Bill, Attendance, Approvals)
-- [ ] Command palette (Cmd/Ctrl+K) federated search
-- [ ] A11y/RTL pass + Sentry transactions per widget
+Phase 2 — Dashboard (mobile/desktop) ✅ COMPLETE
+- [x] Responsive grid + sidebar/bottom‑nav parity
+- [x] Verification banner widget bound to setup status
+- [x] Upcoming Compliance widget + counts API
+- [x] Feature tiles (KYC, Documents, Invoicing, Upload Bill, Attendance, Approvals)
+- [x] Command palette (Cmd/Ctrl+K) federated search
+- [x] A11y/RTL pass + Sentry transactions per widget
 
-Phase 2.1 — Upcoming Compliances
-- [ ] Rules engine src/lib/compliance/rules.ts with tests
-- [ ] GET /api/compliance/upcoming + PATCH status + ICS export
-- [ ] Mobile month‑chips screen
-- [ ] Desktop two‑pane with filters and bulk actions
+Phase 2.1 — Upcoming Compliances ✅ COMPLETE
+- [x] Rules engine src/lib/compliance/rules.ts with tests
+- [x] GET /api/compliance/upcoming + PATCH status + ICS export
+- [x] Mobile month‑chips screen
+- [x] Desktop two‑pane with filters and bulk actions
 
-Phase 2.2 — Features Hub
-- [ ] KYC Center forms + progress persistence
-- [ ] Documents quick links + recent/starred
-- [ ] Invoicing basic list/create
-- [ ] Upload Bill with OCR extraction + dedupe
-- [ ] Approvals queue + policies
-- [ ] Badges via counts API + feature flags
+Phase 2.2 — Features Hub ✅ COMPLETE
+- [x] KYC Center forms + progress persistence
+- [x] Documents quick links + recent/starred
+- [x] Invoicing basic list/create
+- [x] Upload Bill with OCR extraction + dedupe
+- [x] Approvals queue + policies
+- [x] Badges via counts API + feature flags
 
-Phase 2.3 — Services Directory
-- [ ] services model + seed
-- [ ] GET/POST endpoints
+Phase 2.3 — Services Directory ✅ COMPLETE
+- [x] services model + seed
+- [x] GET/POST endpoints
 - [ ] Search/typeahead + filters
 - [ ] Request flow → Messaging case
 - [ ] Tests and a11y checks
