@@ -70,7 +70,7 @@ export default function EntitiesPage() {
 
   return (
     <PermissionGate
-      permission="entity:read"
+      permission="USERS_VIEW"
       fallback={
         <div className="p-6 text-center">
           <p className="text-gray-600">
@@ -218,7 +218,7 @@ export default function EntitiesPage() {
                 ? "Try adjusting your filters"
                 : "Create your first entity to get started"}
             </p>
-            <PermissionGate permission="entity:create">
+            <PermissionGate permission="USERS_MANAGE">
               <Link href="/admin/entities/new" className="mt-4 inline-block">
                 <Button className="gap-2">
                   <Plus className="w-4 h-4" />
