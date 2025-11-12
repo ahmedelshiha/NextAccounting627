@@ -102,7 +102,7 @@ export async function initializeImportJob(
     await redis.set(key, JSON.stringify(state), { ex: IMPORT_TIMEOUT / 1000 });
     
     // Enqueue job for processing
-    await redis.lpush(JOB_QUEUE, JSON.stringify({
+    await (redis as any).lpush(JOB_QUEUE, JSON.stringify({
       jobId,
       tenantId,
       userId,
