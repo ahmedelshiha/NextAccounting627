@@ -68,7 +68,7 @@ export const CommunicationNotificationsSchema = z.object({
 const NewsletterTopicSchema = z.object({
   key: z.string().min(1).max(100),
   label: z.string().min(1).max(120),
-  description: z.string().max(500).optional().default(''),
+  description: z.string().max(500).default(''),
 })
 
 export const CommunicationNewslettersSchema = z.object({
