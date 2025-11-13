@@ -56,7 +56,7 @@ export interface SigningSession {
 export interface SigningSessionSigner {
   email: string
   name: string
-  status: 'PENDING' | 'SIGNED' | 'REJECTED' | 'EXPIRED'
+  status: 'PENDING' | 'IN_PROGRESS' | 'SIGNED' | 'REJECTED' | 'EXPIRED'
   signedAt?: Date
   ipAddress?: string
 }
