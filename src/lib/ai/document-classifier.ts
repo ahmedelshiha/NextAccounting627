@@ -381,7 +381,7 @@ export function classifyDocument(
   const requiredReview =
     (anomalies && anomalies.some(a => a.severity === 'high')) ||
     classification.confidence < 0.7 ||
-    linkedEntities.length === 0
+    (!linkedEntities || linkedEntities.length === 0)
 
   // Check for expiry dates in ID documents
   let expiryDate: Date | undefined
