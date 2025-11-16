@@ -4,7 +4,6 @@
  */
 
 import useSWR from "swr";
-import { useMemo } from "react";
 import { KYCData, KYCApiResponse } from "../types/kyc";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -60,45 +59,70 @@ export function useKYCData({
   };
 }
 
+/**
+ * Fetch KYC data for multiple entities (non-hook version)
+ * 
+ * @param entityIds - Array of entity IDs
+ * @returns Promise resolving to array of KYC data
+ */
+export async function fetchMultipleKYCData(
+  entityIds: string[]
+): Promise<(KYCData | undefined)[]> {
+  const results = await Promise.all(
+    entityIds.map((entityId) =>
+      fetch(`/api/kyc?entityId=${entityId}`)
+        .then((res) => res.json() as Promise<KYCApiResponse>)
+        .then((data) => data.data)
+        .catch(() => undefined)
+    )
+  );
+  return results;
+}
+
+interface UseMultipleKYCDataOptions {
+  entityIds: string[];
+  enabled?: boolean;
+}
+
 interface UseMultipleKYCDataReturn {
   data: (KYCData | undefined)[];
   isLoading: boolean;
   isError: boolean;
-  refresh: () => void;
+  refresh: () => Promise<void>;
 }
 
 /**
  * Hook to fetch KYC data for multiple entities
+ * Note: For multiple entities, consider using fetchMultipleKYCData instead
  * 
- * @param entityIds - Array of entity IDs
+ * @param options - Configuration options including entityIds array
  * @returns Array of KYC data results
  */
-export function useMultipleKYCData(entityIds: string[]): UseMultipleKYCDataReturn {
-  // Fetch data for all entities
-  const dataList = useMemo(() => {
-    return entityIds.map((entityId) => ({
-      entityId,
-      key: entityId ? `/api/kyc?entityId=${entityId}` : null,
-    }));
-  }, [entityIds]);
+export function useMultipleKYCData({
+  entityIds,
+  enabled = true,
+}: UseMultipleKYCDataOptions): UseMultipleKYCDataReturn {
+  const url = enabled && entityIds.length > 0 
+    ? `/api/kyc?entityIds=${entityIds.join(",")}` 
+    : null;
 
-  // Use SWR for each entity
-  const results = useMemo(() => {
-    return dataList.map(({ key }) =>
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      useSWR<KYCApiResponse>(key, fetcher, {
-        dedupingInterval: 5000,
-      })
-    );
-  }, [dataList]);
-
-  const isLoading = results.some((r) => r.isLoading);
-  const isError = results.some((r) => !!r.error);
+  const { data, error, isLoading, mutate } = useSWR<KYCApiResponse & { data: (KYCData | undefined)[] }>(
+    url,
+    (url) =>
+      fetch(url)
+        .then((res) => res.json())
+        .catch(() => ({ data: [] })),
+    {
+      dedupingInterval: 5000,
+    }
+  );
 
   return {
-    data: results.map((r) => r.data?.data),
+    data: data?.data || [],
     isLoading,
-    isError,
-    refresh: () => results.forEach((r) => r.mutate()),
+    isError: !!error,
+    refresh: async () => {
+      await mutate();
+    },
   };
 }
